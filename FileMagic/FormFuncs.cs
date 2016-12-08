@@ -8,12 +8,11 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-
 namespace FileMagic
 {
-    partial class Form1
+    public partial class Form1
     {
-        void Serialize(string FileName)
+        private void Serialize(string FileName)
         {
             try
             {
@@ -33,7 +32,7 @@ namespace FileMagic
             }
         }
 
-        void Deserialize(string FileName)
+        private void Deserialize(string FileName)
         {
             try
             {
@@ -43,10 +42,6 @@ namespace FileMagic
                     Stream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     formData = (FormData)formatter.Deserialize(stream);
                     stream.Close();
-
-                    //Bind the comboboxes data source
-                    txtSrcInput.DataSource = formData.srcInputList;
-                    txtDstInput.DataSource = formData.dstInputList;
                 }
             }
             catch
