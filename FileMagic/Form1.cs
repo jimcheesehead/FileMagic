@@ -52,7 +52,7 @@ namespace FileMagic
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-           Serialize(formDataFile);
+            Serialize(formDataFile);
         }
 
         private void btnSrcBrowse_Click(object sender, EventArgs e)
@@ -108,6 +108,40 @@ namespace FileMagic
                 formData.dstInputList.Clear();
                 Serialize(formDataFile);
             }
+        }
+
+        private void btnAnalyze_Click(object sender, EventArgs e)
+        {
+            Analyze analyze = new Analyze();
+
+            if (string.IsNullOrEmpty(txtSrcInput.Text))
+            {
+                MessageBox.Show("No source directory specified");
+                return;
+            }
+            srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
+            if (!Directory.Exists(srcPath))
+            {
+                MessageBox.Show(String.Format("{0} is not a valid directory", srcPath));
+                return;
+            }
+
+            // Count the files
+            analyze.countDirectoryFiles(srcPath);
+
+            string text = String.Format("Contains {0} files, {1} folders ({2})",
+                analyze.fileCount, analyze.folderCount,
+                GetBytesReadable(analyze.directorySize));
+
+            if (analyze.badLinkCount > 0)
+                text += String.Format(" - {0} bad links", analyze.badLinkCount);
+
+            MessageBox.Show(text);
+        }
+
+        private void btnCopy_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void Push(BindingList<string> list, string item)
