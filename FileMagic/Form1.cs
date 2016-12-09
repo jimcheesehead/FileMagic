@@ -112,7 +112,7 @@ namespace FileMagic
 
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
-            Analyze analyze = new Analyze();
+            FileOps fileOps = new FileOps();
 
             if (string.IsNullOrEmpty(txtSrcInput.Text))
             {
@@ -127,14 +127,18 @@ namespace FileMagic
             }
 
             // Count the files
-            analyze.countDirectoryFiles(srcPath);
+            fileOps.countDirectoryFiles(srcPath);
 
             string text = String.Format("Contains {0} files, {1} folders ({2})",
-                analyze.fileCount, analyze.folderCount,
-                GetBytesReadable(analyze.directorySize));
+                fileOps.fileCount, fileOps.folderCount,
+                GetBytesReadable(fileOps.directorySize));
 
-            if (analyze.badLinkCount > 0)
-                text += String.Format(" - {0} bad links", analyze.badLinkCount);
+            if (fileOps.badLinkCount > 0)
+                text += String.Format(" - {0} bad links", fileOps.badLinkCount);
+
+            // Save the processed source path.
+            Push(formData.srcInputList, srcPath);
+            txtSrcInput.SelectedIndex = 0;
 
             MessageBox.Show(text);
         }

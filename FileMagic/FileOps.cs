@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 using System.IO;
 using FileShortcutHelper;
 
-using System.Windows.Forms;
-
+using System.Windows.Forms; // Only for MessageBox
 
 namespace FileMagic
 {
-    class Analyze
+    class FileOps
     {
-        public Analyze() // Constructor
+        public FileOps() // Constructor
         { }
 
         public int fileCount { get; private set; }
@@ -29,7 +28,6 @@ namespace FileMagic
         {
             get
             {
-
                 return badLinks.Count;
             }
         }
@@ -67,34 +65,35 @@ namespace FileMagic
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                FileInfo fileToCopy;
-                fileToCopy = file;
+                FileInfo currentFile = file; // Copy it so it can be changed
 
                 if (file.Extension == @".lnk")
                 {
-                    fileToCopy = new FileInfo(ShortcutHelper.ResolveShortcut(file.FullName));
+                    // Change the current file info to the linked target file
+                    currentFile = new FileInfo(ShortcutHelper.ResolveShortcut(file.FullName));
 
                     // Check to see if file is a directory
-                    if (fileToCopy.Extension == String.Empty)
+                    if (currentFile.Extension == String.Empty)
                     {
-                        MessageBox.Show(String.Format("File {0} is a linked directory", fileToCopy.FullName));
+                        MessageBox.Show(String.Format("File {0} is a linked directory", currentFile.FullName));
 
+                        // Recursively process this directory
                         string srcPath = ShortcutHelper.ResolveShortcut(file.FullName);
                         DirectoryCount(srcPath);
                         continue;
                     }
 
-                    if (!fileToCopy.Exists)
+                    if (!currentFile.Exists)
                     {
                         // This file had a bad or missing target link
-                        // MessageBox.Show(String.Format("File {0} does not exist", fileToCopy.FullName));
+                        // MessageBox.Show(String.Format("File {0} does not exist", currentFile.FullName));
                         badLinks.Add(file.FullName);
                         fileCount++; // Count it anyway
                         continue;
                     }
                 }
 
-                directorySize += fileToCopy.Length;
+                directorySize += currentFile.Length;
 
                 fileCount++;
                 filesCopied++;
@@ -106,5 +105,6 @@ namespace FileMagic
                 DirectoryCount(subdir.FullName);
             }
         }
+
     }
 }
