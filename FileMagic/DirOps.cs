@@ -9,7 +9,7 @@ using FileShortcutHelper;
 
 using System.Windows.Forms; // Only for MessageBox
 
-namespace AsyncTest
+namespace FileMagic
 {
     static class DirOps
     {

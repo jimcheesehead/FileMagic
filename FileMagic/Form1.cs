@@ -29,6 +29,12 @@ namespace FileMagic
                 "FileMagic.dat");
 
         string srcPath, dstPath;
+        int totalDirs;
+        int fileCount, totalFiles;
+        string text; // Temporary storage
+
+        public static int FileCount { get; set; }
+
 
         public Form1()
         {
@@ -46,7 +52,7 @@ namespace FileMagic
             srcPath = txtSrcInput.SelectedText;
             dstPath = txtDstInput.SelectedText;
 
-            // ShowSatus("Ready", "");
+            ShowSatus("Ready", "");
 
         }
 
@@ -144,7 +150,7 @@ namespace FileMagic
             ShowSatus("Ready", text);
         }
 
-        private void btnCopy_Click(object sender, EventArgs e)
+        private async void btnCopy_Click(object sender, EventArgs e)
         {
             FileOps fileOps = new FileOps();
 
@@ -179,20 +185,64 @@ namespace FileMagic
                 }
             }
 
-            // Copy all the files
-            //ShowSatus("Working", "");
-            //fCount = files.countDirectoryFiles(srcPath);
 
-            //progresBarInit(fCount);
-            //backgroundWorker1.RunWorkerAsync(fCount);
+            totalDirs = 0;
+            fileCount = 0;
+            totalDirs = totalFiles = 0;
 
-            fileOps.copyDirectoryFiles(srcPath, dstPath, false /* Don't do subdirectioes yet */);
+            DirOps.DirInfo info;
+            DirOps.Options options = GetOptions();
 
-            string text = String.Format("Copied {0} files, {1} folders ({2})",
-                fileOps.fileCount, fileOps.folderCount + 1,
-                GetBytesReadable(fileOps.directorySize));
-            if (fileOps.badLinkCount > 0)
-                text += String.Format(" - {0} bad links", fileOps.badLinkCount);
+            info = DirOps.GetDirInfo(srcPath, options); /*************************************************************************/
+            totalFiles = info.totalFiles;
+            // Show the the status of the background copying
+
+            if (options.HasFlag(DirOps.Options.TopDirectoryOnly))
+            {
+                text = String.Format("Copying {0} files ({1})",
+                    info.totalFiles, GetBytesReadable(info.totalBytes));
+            }
+            else
+            {
+                text = String.Format("Copying {0} files, {1} folders ({2})",
+                    info.totalFiles, info.totalDirs, GetBytesReadable(info.totalBytes));
+                if (info.badLinks.Count() > 0)
+                    text += String.Format(" - {0} bad links", info.badLinks.Count());
+            }
+            ShowSatus("Working ", text);
+
+            DirOps.DirInfo inf = DirOps.CountDirs(srcPath);
+            text = String.Format("Contains {0} files, {1} folders", inf.totalFiles, inf.totalDirs);
+            MessageBox.Show(text);
+
+            progressBar.Visible = true;
+            lblPct.Visible = true;
+
+            backgroundWorker1.RunWorkerAsync();
+
+
+            // Copy the source directory to the destination directory asynchronously
+            info = await DirOps.AsyncDirectoryCopy(srcPath, dstPath,
+                progressCallback, options);
+            Task.WaitAll(); // Is this needed?
+
+            text = String.Format("Done!\nCopyied {0} files, in {1} folders ({2})",
+                info.totalFiles, info.totalDirs, GetBytesReadable(info.totalBytes));
+            if (info.badLinks.Count() > 0)
+                text += String.Format(" - {0} bad links", info.badLinks.Count());
+
+            MessageBox.Show(text);
+
+            /***************************
+             * Need to stop the background worker here if it's running
+             */
+
+            backgroundWorker1.CancelAsync();
+
+            lblStatus.Text = "Ready";
+
+            int endTotalFiles = fileCount;
+
 
             // Operation complete. Save source and destination paths
             Push(formData.srcInputList, srcPath);
@@ -204,13 +254,32 @@ namespace FileMagic
 
         }
 
+        private void progressCallback(DirOps.DirInfo obj)
+        {
+            fileCount = obj.totalFiles;
+        }
+
         private void ShowSatus(string txtStatus, string txtResult)
         {
-            MessageBox.Show(txtResult);
-
-            //lblStatus.Text = txtStatus;
-            //lblResult.Text = txtResult;
+            lblStatus.Text = txtStatus;
+            lblResult.Text = txtResult;
             this.Refresh();
+        }
+
+        DirOps.Options GetOptions()
+        {
+            DirOps.Options options = new DirOps.Options();
+
+            options = DirOps.Options.None;
+            //if (chkBoxOverwrite.Checked)
+            //{
+            //    options |= DirOps.Options.OverWriteFiles;
+            //}
+            //if (chkBoxTopDirOnly.Checked)
+            //{
+            //    options |= DirOps.Options.TopDirectoryOnly;
+            //}
+            return options;
         }
 
         private void Push(BindingList<string> list, string item)

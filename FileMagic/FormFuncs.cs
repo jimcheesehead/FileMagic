@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Threading;
 
 namespace FileMagic
 {
@@ -18,17 +19,59 @@ namespace FileMagic
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            int percentComplete, highestPercentageReached = 0;
+
+            while (true)
+            {
+                if (backgroundWorker1.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+
+                percentComplete = (int)((float)fileCount / (float)totalFiles * 100);
+                if (percentComplete >= 100)
+                    break;
+
+                if (percentComplete > highestPercentageReached)
+                {
+                    highestPercentageReached = percentComplete;
+                    backgroundWorker1.ReportProgress(percentComplete);
+                }
+                Thread.Sleep(100); // Wait 100 milliseconds;
+            }
 
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            // Change the value of the ProgressBar to the BackgroundWorker progress.
+            progressBar.Value = e.ProgressPercentage;
+            // Show percentage complete
+            lblPct.Text = e.ProgressPercentage.ToString() + "% complete";
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            string text;
 
+            if ((e.Cancelled == true))
+            {
+                text = "Canceled!";
+            }
+
+            else if (!(e.Error == null))
+            {
+                text = ("Error: " + e.Error.Message);
+            }
+
+            else
+            {
+                text = "Done!";
+            }
+
+            //MessageBox.Show("Background Worker " + text);
+            //ProgressBar.Value = 0;
         }
 
         private void Serialize(string FileName)
