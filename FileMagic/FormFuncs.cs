@@ -9,11 +9,28 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace FileMagic
 {
     public partial class Form1
     {
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
         private void Serialize(string FileName)
         {
             try
