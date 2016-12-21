@@ -213,11 +213,24 @@ namespace FileMagic
             return fCount;
         }
 
-        public static DirInfo CountDirs(string path)
+        public static long GetDirectorySize(string path)
+        {
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            long size = 0;
+            foreach (var file in files)
+            {
+                FileInfo info = new FileInfo(file);
+                size += info.Length;
+            }
+            return size;
+        }
+
+        public static DirInfo GetDirectorySizes(string path)
         {
             DirInfo info = new DirInfo();
             info.totalDirs = System.IO.Directory.GetDirectories(path, "*", SearchOption.AllDirectories).Length;
             info.totalFiles = Directory.GetFiles(path, "*", SearchOption.AllDirectories).Length;
+            info.totalBytes = GetDirectorySize(path);
             return info;
         }
 

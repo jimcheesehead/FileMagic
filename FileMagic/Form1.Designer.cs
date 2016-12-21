@@ -57,6 +57,7 @@
             this.btnDstBrowse = new System.Windows.Forms.Button();
             this.txtSrcInput = new System.Windows.Forms.ComboBox();
             this.txtDstInput = new System.Windows.Forms.ComboBox();
+            this.chkBoxOverwrite = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -286,11 +287,22 @@
             this.txtDstInput.Size = new System.Drawing.Size(291, 21);
             this.txtDstInput.TabIndex = 5;
             // 
+            // chkBoxOverwrite
+            // 
+            this.chkBoxOverwrite.AutoSize = true;
+            this.chkBoxOverwrite.Location = new System.Drawing.Point(597, 96);
+            this.chkBoxOverwrite.Name = "chkBoxOverwrite";
+            this.chkBoxOverwrite.Size = new System.Drawing.Size(130, 17);
+            this.chkBoxOverwrite.TabIndex = 4;
+            this.chkBoxOverwrite.Text = "Overwrite existing files";
+            this.chkBoxOverwrite.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 422);
+            this.Controls.Add(this.chkBoxOverwrite);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
@@ -343,6 +355,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblResult;
         private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.ToolStripStatusLabel lblPct;
+        private System.Windows.Forms.CheckBox chkBoxOverwrite;
     }
 }
 

@@ -19,6 +19,7 @@ namespace FileMagic
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            int totalFiles = (int) e.Argument;
             int percentComplete, highestPercentageReached = 0;
 
             while (true)
