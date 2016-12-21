@@ -68,7 +68,7 @@ namespace FileMagic
                     // Check to see if file is a directory
                     if (currentFile.Extension == String.Empty)
                     {
-                        MessageBox.Show(String.Format("File {0} is a linked directory", file));
+                        //MessageBox.Show(String.Format("File {0} is a linked directory", file));
                         if (true)
                         {
                             string path = ShortcutHelper.ResolveShortcut(file);
@@ -142,7 +142,7 @@ namespace FileMagic
 
                     if (extension == String.Empty)
                     {
-                        MessageBox.Show(String.Format("File {0} is a linked directory", srcFile));
+                        //MessageBox.Show(String.Format("File {0} is a linked directory", srcFile));
                         //string path = ShortcutHelper.ResolveShortcut(file);
                         directories.Add(srcFile);
                         continue;

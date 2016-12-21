@@ -58,6 +58,7 @@
             this.txtSrcInput = new System.Windows.Forms.ComboBox();
             this.txtDstInput = new System.Windows.Forms.ComboBox();
             this.chkBoxOverwrite = new System.Windows.Forms.CheckBox();
+            this.chkBoxTopDirOnly = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -166,7 +167,8 @@
             // lblPct
             // 
             this.lblPct.Name = "lblPct";
-            this.lblPct.Size = new System.Drawing.Size(0, 17);
+            this.lblPct.Size = new System.Drawing.Size(24, 17);
+            this.lblPct.Text = "Pct";
             // 
             // toolStrip1
             // 
@@ -297,11 +299,22 @@
             this.chkBoxOverwrite.Text = "Overwrite existing files";
             this.chkBoxOverwrite.UseVisualStyleBackColor = true;
             // 
+            // chkBoxTopDirOnly
+            // 
+            this.chkBoxTopDirOnly.AutoSize = true;
+            this.chkBoxTopDirOnly.Location = new System.Drawing.Point(102, 96);
+            this.chkBoxTopDirOnly.Name = "chkBoxTopDirOnly";
+            this.chkBoxTopDirOnly.Size = new System.Drawing.Size(110, 17);
+            this.chkBoxTopDirOnly.TabIndex = 5;
+            this.chkBoxTopDirOnly.Text = "Top directory only";
+            this.chkBoxTopDirOnly.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 422);
+            this.Controls.Add(this.chkBoxTopDirOnly);
             this.Controls.Add(this.chkBoxOverwrite);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStrip1);
@@ -356,6 +369,7 @@
         private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.ToolStripStatusLabel lblPct;
         private System.Windows.Forms.CheckBox chkBoxOverwrite;
+        private System.Windows.Forms.CheckBox chkBoxTopDirOnly;
     }
 }
 

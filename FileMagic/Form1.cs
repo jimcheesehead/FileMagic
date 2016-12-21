@@ -30,7 +30,6 @@ namespace FileMagic
 
         string srcPath, dstPath;
         int fileCount;
-        //int  totalFiles;
         string text; // Temporary storage
 
         public static int FileCount { get; set; }
@@ -118,7 +117,7 @@ namespace FileMagic
 
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
-            FileOps fileOps = new FileOps();
+            /*FileOps fileOps = new FileOps()*/;
             srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
 
             if (string.IsNullOrEmpty(srcPath))
@@ -133,26 +132,30 @@ namespace FileMagic
                 return;
             }
 
+            DirOps.DirInfo info;
+            DirOps.Options options = GetOptions();
+
+            info = DirOps.GetDirInfo(srcPath, options);
+
             // Count the files
-            fileOps.countDirectoryFiles(srcPath);
+            // fileOps.countDirectoryFiles(srcPath);
+            text = String.Format("\"{0}\" contains {1} files, {2} folders ({3})",
+                srcPath, info.totalFiles, info.totalDirs,
+                GetBytesReadable(info.totalBytes));
 
-            string text = String.Format("Contains {0} files, {1} folders ({2})",
-                fileOps.fileCount, fileOps.folderCount,
-                GetBytesReadable(fileOps.directorySize));
-
-            if (fileOps.badLinkCount > 0)
-                text += String.Format(" - {0} bad links", fileOps.badLinkCount);
+            if (info.badLinks.Count> 0)
+                text += String.Format(" - {0} bad links", info.badLinks.Count);
 
             // Save the processed source path.
             Push(formData.srcInputList, srcPath);
             txtSrcInput.SelectedIndex = 0;
 
-            ShowSatus("Ready", text);
+            ShowSatus("", text);
         }
 
         private async void btnCopy_Click(object sender, EventArgs e)
         {
-            FileOps fileOps = new FileOps();
+            //FileOps fileOps = new FileOps();
 
             srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
             dstPath = txtDstInput.Text.TrimEnd(new[] { '\\', '/' });
@@ -185,15 +188,11 @@ namespace FileMagic
                 }
             }
 
-
-            fileCount = 0;
-            //totalFiles = 0;
-
             DirOps.DirInfo info;
             DirOps.Options options = GetOptions();
 
-            info = DirOps.GetDirInfo(srcPath, options); /*************************************************************************/
-            //totalFiles = info.totalFiles;
+            info = DirOps.GetDirInfo(srcPath, options); 
+            
             // Show the the status of the background copying
 
             if (options.HasFlag(DirOps.Options.TopDirectoryOnly))
@@ -210,13 +209,16 @@ namespace FileMagic
             }
             ShowSatus("Working ", text);
 
-            DirOps.DirInfo inf = DirOps.GetDirectorySizes(srcPath);
-            text = String.Format("Contains {0} files, {1} folders", inf.totalFiles, inf.totalDirs);
-            MessageBox.Show(text);
+            //DirOps.DirInfo inf = DirOps.GetDirectorySizes(srcPath);
+            //text = String.Format("Contains {0} files, {1} folders", inf.totalFiles, inf.totalDirs);
+            //MessageBox.Show(text);
 
             progressBar.Visible = true;
             lblPct.Visible = true;
 
+            // Start the background worker which will monitor the current file count
+            fileCount = 0;
+            lblPct.Visible = true;
             backgroundWorker1.RunWorkerAsync(info.totalFiles);
 
             // Copy the source directory to the destination directory asynchronously
@@ -224,25 +226,26 @@ namespace FileMagic
                 progressCallback, options);
             Task.WaitAll(); // Is this needed?
 
-            DirOps.DirInfo dstInfo = DirOps.GetDirectorySizes(dstPath);
-            text = String.Format("Contains {0} files, {1} folders ({2})",
-                dstInfo.totalFiles, dstInfo.totalDirs,
-                GetBytesReadable(dstInfo.totalBytes));
-            MessageBox.Show(text);
+            if (info.badLinks.Count() > 0)
+            {
+                MessageBox.Show(String.Format("{0} bad links found", info.badLinks.Count()));
+            }
 
-             // stop the background worker here if it's running
+            // Operation complete. 
+            // Stop the background worker here if it's running
             backgroundWorker1.CancelAsync();
 
-            // Operation complete. Save source and destination paths
+            //Save source and destination paths
             Push(formData.srcInputList, srcPath);
             txtSrcInput.SelectedIndex = 0;
             Push(formData.dstInputList, dstPath);
             txtDstInput.SelectedIndex = 0;
 
-            text = String.Format("Copied {0} files, in {1} folders ({2})",
-                info.totalFiles, info.totalDirs, GetBytesReadable(info.totalBytes));
-            if (info.badLinks.Count() > 0)
-                text += String.Format(" - {0} bad links", info.badLinks.Count());
+            // Show destination results
+            DirOps.DirInfo dstInfo = DirOps.GetDirectorySizes(dstPath);
+            text = String.Format("\"{0}\" Contains {1} files, {2} folders ({3})",
+                dstPath, dstInfo.totalFiles, dstInfo.totalDirs,
+                GetBytesReadable(dstInfo.totalBytes));
 
             ShowSatus("Ready", text);
 
@@ -257,6 +260,8 @@ namespace FileMagic
         {
             lblStatus.Text = txtStatus;
             lblResult.Text = txtResult;
+            progressBar.Visible = false;
+            lblPct.Visible = false;
             this.Refresh();
         }
 
@@ -269,10 +274,10 @@ namespace FileMagic
             {
                 options |= DirOps.Options.OverWriteFiles;
             }
-            //if (chkBoxTopDirOnly.Checked)
-            //{
-            //    options |= DirOps.Options.TopDirectoryOnly;
-            //}
+            if (chkBoxTopDirOnly.Checked)
+            {
+                options |= DirOps.Options.TopDirectoryOnly;
+            }
             return options;
         }
 
