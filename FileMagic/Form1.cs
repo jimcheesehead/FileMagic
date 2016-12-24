@@ -48,8 +48,8 @@ namespace FileMagic
             //Bind the comboboxes data source
             txtSrcInput.DataSource = formData.srcInputList;
             txtDstInput.DataSource = formData.dstInputList;
-            srcPath = txtSrcInput.SelectedText;
-            dstPath = txtDstInput.SelectedText;
+            srcPath = txtSrcInput.SelectedItem.ToString();
+            dstPath = txtDstInput.SelectedItem.ToString();
 
             ShowSatus("Ready", "");
 
@@ -58,6 +58,11 @@ namespace FileMagic
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Serialize(formDataFile);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void btnSrcBrowse_Click(object sender, EventArgs e)
@@ -117,7 +122,6 @@ namespace FileMagic
 
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
-            /*FileOps fileOps = new FileOps()*/;
             srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
 
             if (string.IsNullOrEmpty(srcPath))
@@ -157,8 +161,8 @@ namespace FileMagic
         {
             //FileOps fileOps = new FileOps();
 
-            srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
-            dstPath = txtDstInput.Text.TrimEnd(new[] { '\\', '/' });
+            //srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
+            //dstPath = txtDstInput.Text.TrimEnd(new[] { '\\', '/' });
 
             // The source path must be vaild and exist. The source and destination paths cannot
             // be the same.

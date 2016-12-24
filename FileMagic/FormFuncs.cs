@@ -112,8 +112,10 @@ namespace FileMagic
             }
         }
 
-        private bool checkPathErrors()
+        private bool checkPathErrors(bool chkBoth = true)
         {
+            srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
+            dstPath = txtDstInput.Text.TrimEnd(new[] { '\\', '/' });
             string errMsg;
 
             if (string.IsNullOrEmpty(srcPath))
@@ -123,10 +125,10 @@ namespace FileMagic
             }
             else if (!Directory.Exists(srcPath))
             {
-                errMsg = "Soruce path is not a vaild directory";
+                errMsg = "Source path is not a vaild directory";
                 txtSrcInput.Focus();
             }
-            else if (string.IsNullOrEmpty(dstPath))
+            else if (chkBoth && string.IsNullOrEmpty(dstPath))
             {
                 errMsg = "Destination path not specified";
                 txtDstInput.Focus();
@@ -136,7 +138,7 @@ namespace FileMagic
             //    errMsg = "Destination path is not a vaild directory";
             //    txtDstInput.Focus();
             //}
-            else if (srcPath == dstPath)
+            else if (chkBoth && (srcPath == dstPath))
             {
                 errMsg = "Source path and destination path are the same";
                 txtDstInput.Focus();
