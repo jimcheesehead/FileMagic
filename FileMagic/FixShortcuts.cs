@@ -16,6 +16,9 @@ namespace FileMagic
                 return;
             }
 
+            EnableButtons(true);
+            filesTextBox.Clear();
+
             DirOps.DirInfo info;
             DirOps.Options options = GetOptions();
             info = DirOps.GetDirInfo(srcPath, options);
@@ -33,6 +36,33 @@ namespace FileMagic
                 string text = String.Format("{0} -> {1}\n", shortcut.FullName, target.FullName);
                 filesTextBox.AppendText(text);
             }
+
+            string[] lines = filesTextBox.Lines;
+            filesTextBox.Select(0, lines[0].Length);
+            filesTextBox.SelectionBackColor = System.Drawing.Color.LightGray;
+
+            //foreach (var line in lines)
+            //{
+            //    int len = line.Length;
+            //}
+
         }
+
+        private void btnUp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDown_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EnableButtons(bool state)
+        {
+            btnUp.Enabled = state;
+            btnDown.Enabled = state;
+        }
+
     }
 }
