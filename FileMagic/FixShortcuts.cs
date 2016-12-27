@@ -37,8 +37,8 @@ namespace FileMagic
                 FileInfo shortcut = new FileInfo(file);
                 FileInfo target = new FileInfo(ShortcutHelper.ResolveShortcut(file));
 
-                //string text = String.Format("{0} -> {1}\n", shortcut.FullName, target.FullName);
-                string text = String.Format("{0}\n", "TEXT123");
+                string text = String.Format("{0} -> {1}\n", shortcut.FullName, target.FullName);
+                //string text = String.Format("{0}\n", "TEXT123");
                 filesTextBox.AppendText(text);
             }
 
@@ -98,6 +98,10 @@ namespace FileMagic
                 index = filesTextBox.SelectionStart;
                 currentTxtBoxLine = line = filesTextBox.GetLineFromCharIndex(index);
                 SelectTextBoxLine(line);
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                // What is the line no.?
             }
         }
 
