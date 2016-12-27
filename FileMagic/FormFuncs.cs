@@ -112,6 +112,20 @@ namespace FileMagic
             }
         }
 
+        private void ProcessSpecialKeys(object sender, KeyPressEventArgs e)
+        {
+            // Ignore some keys
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;
+            }
+        }
+
+        //private void ProcessSpecialKeys(object sender, KeyPressEventArgs e)
+        //{
+
+        //}
+
         private bool checkPathErrors(bool chkBoth = true)
         {
             srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
