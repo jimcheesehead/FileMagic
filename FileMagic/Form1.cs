@@ -48,8 +48,14 @@ namespace FileMagic
             //Bind the comboboxes data source
             txtSrcInput.DataSource = formData.srcInputList;
             txtDstInput.DataSource = formData.dstInputList;
-            srcPath = txtSrcInput.SelectedItem.ToString();
-            dstPath = txtDstInput.SelectedItem.ToString();
+
+            object obj = txtSrcInput.SelectedItem;
+
+            srcPath = txtSrcInput.SelectedItem != null ? txtSrcInput.SelectedItem.ToString() : null;
+            dstPath = txtDstInput.SelectedItem != null ? txtDstInput.SelectedItem.ToString() : null;
+
+            //srcPath = txtSrcInput.SelectedItem.ToString();
+            //dstPath = txtDstInput.SelectedItem.ToString();
 
             ShowSatus("Ready", "");
 

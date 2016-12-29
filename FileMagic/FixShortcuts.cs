@@ -11,6 +11,7 @@ namespace FileMagic
     {
         int currentTxtBoxLine;
         int totalTxtBoxLines;
+        const string PointsTo = " -> ";
 
         private void fixShortcutsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -37,7 +38,7 @@ namespace FileMagic
                 FileInfo shortcut = new FileInfo(file);
                 FileInfo target = new FileInfo(ShortcutHelper.ResolveShortcut(file));
 
-                string text = String.Format("{0} -> {1}\n", shortcut.FullName, target.FullName);
+                string text = String.Format("{0}{1}{2}\n", shortcut.FullName, PointsTo, target.FullName);
                 //string text = String.Format("{0}\n", "TEXT123");
                 filesTextBox.AppendText(text);
             }
@@ -95,9 +96,23 @@ namespace FileMagic
                 e.Handled = true;
 
                 int line, index;
+                int first, last;
+                string text, link, target, shortcut;
+
                 index = filesTextBox.SelectionStart;
                 currentTxtBoxLine = line = filesTextBox.GetLineFromCharIndex(index);
                 SelectTextBoxLine(line);
+
+                text = filesTextBox.SelectedText;
+                first = text.IndexOf(PointsTo);
+                last = first + PointsTo.Length;
+                link = text.Substring(0, first);
+
+                shortcut = ShortcutHelper.ResolveShortcut(link);
+
+                ShortcutHelper.ChangeShortcut(link, @"X:\foobar.txt");
+
+                //target = text.Substring(last);
             }
             else if (e.KeyCode == Keys.Down)
             {

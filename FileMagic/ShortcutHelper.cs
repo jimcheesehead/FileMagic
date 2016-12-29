@@ -60,5 +60,28 @@ namespace FileShortcutHelper
 			}
 			return string.Empty;
 		}
-	}
+
+        public static void ChangeShortcut(string path, string target)
+        {
+            if (IsShortcut(path))
+            {
+                string directory = Path.GetDirectoryName(path);
+                string file = Path.GetFileName(path);
+
+                Shell32.Shell shell = new Shell32.Shell();
+                Shell32.Folder folder = shell.NameSpace(directory);
+                Shell32.FolderItem folderItem = folder.ParseName(file);
+
+                Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
+                Shell32.ShellLinkObject newLink = (Shell32.ShellLinkObject)folderItem.GetLink;
+
+                newLink.Path = target;
+
+                link.Path = newLink.Path;
+                link.Save();
+
+                //return link.Path;
+            }
+        }
+    }
 }

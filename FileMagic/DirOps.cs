@@ -51,6 +51,12 @@ namespace FileMagic
         {
             DirInfo inf = info;
 
+            if (!Directory.Exists(srcPath))
+            {
+                // Bad directory path
+                return inf;
+            }
+
             // Get the subdirectories for the specified directory.
             var directories = new List<string>(Directory.GetDirectories(srcPath));
             //inf.totalDirs += directories.Count();
