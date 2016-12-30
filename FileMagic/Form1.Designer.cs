@@ -42,6 +42,8 @@
             this.fixShortcutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeBadLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblResult = new System.Windows.Forms.ToolStripStatusLabel();
@@ -83,7 +85,8 @@
             this.viewToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.windowToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.debugToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
@@ -167,6 +170,21 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.makeBadLinksToolStripMenuItem});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // makeBadLinksToolStripMenuItem
+            // 
+            this.makeBadLinksToolStripMenuItem.Name = "makeBadLinksToolStripMenuItem";
+            this.makeBadLinksToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.makeBadLinksToolStripMenuItem.Text = "Make bad links";
+            this.makeBadLinksToolStripMenuItem.Click += new System.EventHandler(this.makeBadLinksToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -386,6 +404,7 @@
             this.filesTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filesTextBox.Location = new System.Drawing.Point(3, 3);
             this.filesTextBox.Name = "filesTextBox";
+            this.filesTextBox.ReadOnly = true;
             this.filesTextBox.Size = new System.Drawing.Size(932, 268);
             this.filesTextBox.TabIndex = 0;
             this.filesTextBox.Text = "";
@@ -474,6 +493,8 @@
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton btnUp;
         private System.Windows.Forms.ToolStripButton btnDown;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem makeBadLinksToolStripMenuItem;
     }
 }
 
