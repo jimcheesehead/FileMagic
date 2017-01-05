@@ -1,10 +1,11 @@
 ﻿using FileShortcutHelper;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 
-using System.Windows.Forms; // Only for MessageBox
+using System.Windows.Forms;
 
 namespace FileMagic
 {
@@ -203,7 +204,7 @@ namespace FileMagic
                 return;
             }
 
-            DirOps.DirInfo info;
+            //DirOps.DirInfo info;
             DirOps.Options options = GetOptions();
 
             string text = String.Format("Create bad links in directory \"{0}\"", srcPath);
@@ -215,6 +216,7 @@ namespace FileMagic
                 return;
             }
 
+
             var files = Directory.EnumerateFiles(srcPath);
             foreach (var file in files)
             {
@@ -223,6 +225,30 @@ namespace FileMagic
                 {
                     // Change the current file info to the linked target file
                     path = new FileInfo(ShortcutHelper.ResolveShortcut(file));
+
+                    string newPath = path.FullName;
+                    string targetDir = path.DirectoryName;
+
+                    //CountDirectoryLevels(newPath);
+                    GetDirectoryLevels(newPath);
+
+                    InputBox("Change Shortcut", "Prompt", ref targetDir);
+
+
+                    text = String.Format("Change all shortcuts to \"{0}\"", targetDir);
+
+                    dialogResult = MessageBox.Show(text, "Some Title",
+                        MessageBoxButtons.YesNoCancel);
+                    if (dialogResult != DialogResult.Yes)
+                    {
+                        return;
+                    }
+
+                    // Change all shortcuts to the new target
+
+
+                    return;
+
                     string s = path.FullName;
                     s = 'B' + s.Remove(0, 1);
 
@@ -237,6 +263,88 @@ namespace FileMagic
                     }
                 }
             }
+        }
+
+        public static int CountDirectoryLevels(string path)
+        {
+            FileInfo f = new FileInfo(path);
+            string DirectoryName = f.DirectoryName;
+
+            char[] delim = {'\\'};
+            string[] levels = DirectoryName.Split(delim);
+            return levels.Count();
+        }
+
+        public string[] GetDirectoryLevels(string path)
+        {
+            FileInfo f = new FileInfo(path);
+            string DirectoryName = f.DirectoryName;
+
+            char delim = '\\';
+            string s = null;
+            string[] levels = DirectoryName.Split(delim);
+
+            for (int i = 0; i < levels.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    s = levels[i];
+                }
+                else
+                {
+                    s += "\\" + levels[i];
+                }
+
+                levels[i] = s;
+                if (i == 0 && levels[i].Contains(":"))
+                    levels[i] += "\\";
+
+                // MessageBox.Show(levels[i]);
+            }
+
+            return levels;
+        }
+
+        public static DialogResult InputBox(string title, string promptText, ref string value)
+        {
+            Form form = new Form();
+            Label label = new Label();
+            TextBox textBox = new TextBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+
+            form.Text = title;
+            label.Text = promptText;
+            textBox.Text = value;
+
+            buttonOk.Text = "OK";
+            buttonCancel.Text = "Cancel";
+            buttonOk.DialogResult = DialogResult.OK;
+            buttonCancel.DialogResult = DialogResult.Cancel;
+
+            label.SetBounds(9, 20, 372, 13);
+            textBox.SetBounds(12, 36, 372, 20);
+            buttonOk.SetBounds(228, 72, 75, 23);
+            buttonCancel.SetBounds(309, 72, 75, 23);
+
+            label.AutoSize = true;
+            textBox.Anchor = textBox.Anchor | AnchorStyles.Right;
+            buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            form.ClientSize = new Size(396, 107);
+            form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
+            form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            form.FormBorderStyle = FormBorderStyle.FixedDialog;
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.AcceptButton = buttonOk;
+            form.CancelButton = buttonCancel;
+
+            DialogResult dialogResult = form.ShowDialog();
+            value = textBox.Text;
+            return dialogResult;
         }
     }
 }
