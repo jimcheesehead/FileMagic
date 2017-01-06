@@ -191,6 +191,7 @@ namespace FileMagic
         private void makeBadLinksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             srcPath = txtSrcInput.Text.TrimEnd(new[] { '\\', '/' });
+            string changeDir = null;
 
             if (string.IsNullOrEmpty(srcPath))
             {
@@ -228,15 +229,19 @@ namespace FileMagic
 
                     string newPath = path.FullName;
                     string targetDir = path.DirectoryName;
+                    string targetName = path.Name;
 
                     //CountDirectoryLevels(newPath);
                     GetDirectoryLevels(newPath);
 
-                    InputBox("Change Shortcut", "Prompt", ref targetDir);
+                    InputBox("Change Shortcut DIRECTORY to " + file, "New DIRECTORY:", ref targetDir);
+                    if (String.Equals(targetDir, path.DirectoryName , StringComparison.OrdinalIgnoreCase))
+                    {
+                        // No change. Ignore
+                        return;
+                    }
 
-
-                    text = String.Format("Change all shortcuts to \"{0}\"", targetDir);
-
+                    text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
                     dialogResult = MessageBox.Show(text, "Some Title",
                         MessageBoxButtons.YesNoCancel);
                     if (dialogResult != DialogResult.Yes)
@@ -245,14 +250,16 @@ namespace FileMagic
                     }
 
                     // Change all shortcuts to the new target
+                    // Test to see if changed directory exists
 
+                    changeDir = targetDir;
 
-                    return;
+                    //return;
 
-                    string s = path.FullName;
-                    s = 'B' + s.Remove(0, 1);
+                    //string s = path.FullName;
+                    //s = 'B' + s.Remove(0, 1);
 
-                    ShortcutHelper.ChangeShortcut(file, s);
+                    ShortcutHelper.ChangeShortcut(file, changeDir + targetName);
 
 
                     // Check to see if file is a directory
@@ -332,9 +339,15 @@ namespace FileMagic
             buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
-            form.ClientSize = new Size(396, 107);
+            //form.ClientSize = new Size(396, 107);
+            Size clientSize = TextRenderer.MeasureText(title, form.Font);
+            form.ClientSize = new Size(clientSize.Width + 100, 107);
+
+
+
             form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
-            form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            //form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            //form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
             form.FormBorderStyle = FormBorderStyle.FixedDialog;
             form.StartPosition = FormStartPosition.CenterScreen;
             form.MinimizeBox = false;
