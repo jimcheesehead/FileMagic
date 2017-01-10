@@ -68,13 +68,17 @@
             this.chkBoxTopDirOnly = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.filesTextBox = new System.Windows.Forms.RichTextBox();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.txtChangeShortcut = new System.Windows.Forms.TextBox();
+            this.lblPathError = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -89,7 +93,7 @@
             this.debugToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1076, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -193,9 +197,9 @@
             this.lblResult,
             this.progressBar,
             this.lblPct});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 436);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 718);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1008, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1076, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -231,7 +235,7 @@
             this.btnDown});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1008, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1076, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -387,44 +391,81 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this.tableLayoutPanel2.Controls.Add(this.filesTextBox, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.toolStrip2, 0, 1);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(31, 131);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(938, 305);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(938, 331);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // filesTextBox
             // 
+            this.tableLayoutPanel2.SetColumnSpan(this.filesTextBox, 2);
             this.filesTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filesTextBox.Location = new System.Drawing.Point(3, 3);
             this.filesTextBox.Name = "filesTextBox";
             this.filesTextBox.ReadOnly = true;
-            this.filesTextBox.Size = new System.Drawing.Size(932, 268);
+            this.filesTextBox.Size = new System.Drawing.Size(932, 258);
             this.filesTextBox.TabIndex = 0;
             this.filesTextBox.Text = "";
             this.filesTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.filesTextBox_KeyDown);
             this.filesTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.filesTextBox_KeyPress);
             // 
-            // toolStrip2
+            // txtChangeShortcut
             // 
-            this.toolStrip2.Location = new System.Drawing.Point(0, 274);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(938, 25);
-            this.toolStrip2.TabIndex = 1;
-            this.toolStrip2.Text = "toolStrip2";
+            this.txtChangeShortcut.Location = new System.Drawing.Point(236, 53);
+            this.txtChangeShortcut.Name = "txtChangeShortcut";
+            this.txtChangeShortcut.Size = new System.Drawing.Size(696, 20);
+            this.txtChangeShortcut.TabIndex = 7;
+            this.txtChangeShortcut.TextChanged += new System.EventHandler(this.txtChangeShortcut_TextChanged);
+            // 
+            // lblPathError
+            // 
+            this.lblPathError.AutoSize = true;
+            this.lblPathError.Location = new System.Drawing.Point(3, 0);
+            this.lblPathError.Name = "lblPathError";
+            this.lblPathError.Size = new System.Drawing.Size(52, 13);
+            this.lblPathError.TabIndex = 1;
+            this.lblPathError.Text = "Bad Link:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Change to:";
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.tableLayoutPanel3.Controls.Add(this.txtChangeShortcut, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.lblPathError, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label4, 0, 1);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(31, 485);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(935, 100);
+            this.tableLayoutPanel3.TabIndex = 7;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1008, 458);
+            this.ClientSize = new System.Drawing.Size(1076, 740);
+            this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.chkBoxTopDirOnly);
             this.Controls.Add(this.chkBoxOverwrite);
@@ -448,7 +489,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -490,11 +532,14 @@
         private System.Windows.Forms.ToolStripMenuItem fixShortcutsToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.RichTextBox filesTextBox;
-        private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton btnUp;
         private System.Windows.Forms.ToolStripButton btnDown;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem makeBadLinksToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtChangeShortcut;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblPathError;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 

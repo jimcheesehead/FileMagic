@@ -28,6 +28,8 @@ namespace FileMagic
         string formDataFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "FileMagic.dat");
 
+        List<string> diskDrives = new List<string>();
+
         string srcPath, dstPath;
         int fileCount;
         string text; // Temporary storage
@@ -56,6 +58,14 @@ namespace FileMagic
 
             //srcPath = txtSrcInput.SelectedItem.ToString();
             //dstPath = txtDstInput.SelectedItem.ToString();
+
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+
+            // Create list of system disk drive letters
+            foreach (DriveInfo d in allDrives)
+            {
+                diskDrives.Add(d.Name);
+            }
 
             ShowSatus("Ready", "");
 

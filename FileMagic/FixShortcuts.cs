@@ -12,7 +12,6 @@ namespace FileMagic
     public partial class Form1
     {
         DirOps.DirInfo info;
-        List<string> diskDrives = new List<string>();
 
 
         int currentTxtBoxLine;
@@ -37,15 +36,7 @@ namespace FileMagic
                 return;
             }
 
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-            // Create list of system disk drive letters
-            foreach (DriveInfo d in allDrives)
-            {
-                diskDrives.Add(d.Name);
-            }
-
-
+            // Show the bad links. Fixes will be initiated by selecting a bad link.
             ShowBadLinks(info.badLinks, 0);
         }
 
@@ -127,7 +118,7 @@ namespace FileMagic
                 first = text.IndexOf(PointsTo);
                 last = first + PointsTo.Length;
                 link = text.Substring(0, first);
-                FixShortcut(link);
+                FixTheShortcut(link);
             }
             else if (e.KeyCode == Keys.Down)
             {
@@ -135,13 +126,46 @@ namespace FileMagic
             }
         }
 
-        private void FixShortcut(string path)
+        private void filesTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+            }
+        }
+
+        private void txtChangeShortcut_TextChanged(object sender, EventArgs e)
+        {
+            System.Drawing.SizeF mySize = new System.Drawing.SizeF();
+
+            // Use the textbox font
+            System.Drawing.Font myFont = txtChangeShortcut.Font;
+
+            using (Graphics g = this.CreateGraphics())
+            {
+                // Get the size given the string and the font
+                mySize = g.MeasureString(txtChangeShortcut.Text, myFont);
+            }
+
+            // Resize the textbox 
+            this.txtChangeShortcut.Width = (int)Math.Round(mySize.Width, 0);
+        }
+
+        /// <summary>
+        /// This is the method that does the work of fixing a bad shortcut (link)
+        /// </summary>
+        /// <param name="path"></param>
+        private void FixTheShortcut(string path)
         {
             string target = ShortcutHelper.ResolveShortcut(path);
             string pathRoot = Path.GetPathRoot(target);
 
             if (!diskDrives.Contains(pathRoot))
             {
+                string format = String.Format("INVALID DISK DRIVE \"{0}\"", pathRoot);
+                lblPathError.Text = format;
+                txtChangeShortcut.Text = target;
+                this.Refresh();
+
                 MessageBox.Show(String.Format("{0} is not a valid drive", pathRoot));
                 return;
             }
@@ -149,13 +173,6 @@ namespace FileMagic
             //ShortcutHelper.ChangeShortcut(path, @"B:\foobar.txt");
 
             ShowBadLinks(info.badLinks, currentTxtBoxLine);
-        }
-
-        private void filesTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-            }
         }
 
         private void SelectTextBoxLine(int line)
@@ -177,8 +194,10 @@ namespace FileMagic
 
         private void EnableButtons(bool state)
         {
+            tableLayoutPanel2.Visible = true;
             btnUp.Enabled = state;
             btnDown.Enabled = state;
+            lblPathError.Text = null;
         }
 
         /// <summary>
@@ -226,48 +245,64 @@ namespace FileMagic
                 {
                     // Change the current file info to the linked target file
                     path = new FileInfo(ShortcutHelper.ResolveShortcut(file));
-
-                    string newPath = path.FullName;
-                    string targetDir = path.DirectoryName;
                     string targetName = path.Name;
 
-                    //CountDirectoryLevels(newPath);
-                    GetDirectoryLevels(newPath);
-
-                    InputBox("Change Shortcut DIRECTORY to " + file, "New DIRECTORY:", ref targetDir);
-                    if (String.Equals(targetDir, path.DirectoryName , StringComparison.OrdinalIgnoreCase))
-                    {
-                        // No change. Ignore
-                        return;
-                    }
-
-                    text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
-                    dialogResult = MessageBox.Show(text, "Some Title",
-                        MessageBoxButtons.YesNoCancel);
-                    if (dialogResult != DialogResult.Yes)
-                    {
-                        return;
-                    }
-
-                    // Change all shortcuts to the new target
-                    // Test to see if changed directory exists
-
-                    changeDir = targetDir;
-
-                    //return;
-
-                    //string s = path.FullName;
-                    //s = 'B' + s.Remove(0, 1);
-
-                    ShortcutHelper.ChangeShortcut(file, changeDir + targetName);
-
-
-                    // Check to see if file is a directory
+                    // Ignore linked directories (for now)
                     if (path.Extension == String.Empty)
                     {
                         MessageBox.Show(String.Format("File {0} is a linked directory", file));
                         continue;
                     }
+
+                    // Set the "change directory" only once
+                    if (string.IsNullOrEmpty(changeDir))
+                    {
+                        string targetDir = path.DirectoryName;
+
+                        //string newPath = path.FullName;
+                        //CountDirectoryLevels(newPath);
+                        //GetDirectoryLevels(newPath);
+
+                        //dialogResult = InputBox("Change Shortcut DIRECTORY to " + file, "New DIRECTORY:", ref targetDir);
+                        //if (dialogResult == DialogResult.Cancel)
+                        //{
+                        //    return;
+                        //}
+
+                        PopupForm popup = new PopupForm();
+                        popup.PopupForm_Initialize(file);
+
+                        dialogResult = popup.ShowDialog();
+                        if (dialogResult == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            continue;
+                        }
+
+                        if (String.Equals(targetDir, path.DirectoryName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // No change. Ignore
+                            continue;
+                        }
+
+                        text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
+                        dialogResult = MessageBox.Show(text, "Some Title",
+                            MessageBoxButtons.YesNoCancel);
+                        if (dialogResult != DialogResult.Yes)
+                        {
+                            return;
+                        }
+
+                        // Change all shortcuts to the new target
+                        // Test to see if changed directory exists
+
+                        changeDir = targetDir;
+                    }
+
+                    ShortcutHelper.ChangeShortcut(file, changeDir + targetName);
                 }
             }
         }
