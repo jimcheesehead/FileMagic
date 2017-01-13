@@ -236,6 +236,11 @@ namespace FileMagic
                 return;
             }
 
+            //PopupForm popup = new PopupForm();
+            //popup.MakeBadLinks(srcPath);
+
+            //popup.PopupForm_Initialize(file);
+
 
             var files = Directory.EnumerateFiles(srcPath);
             foreach (var file in files)
@@ -282,13 +287,15 @@ namespace FileMagic
                             continue;
                         }
 
-                        if (String.Equals(targetDir, path.DirectoryName, StringComparison.OrdinalIgnoreCase))
+                        string newShortcut = popup.NewShortcut;
+
+                        if (String.Equals(targetDir, newShortcut, StringComparison.OrdinalIgnoreCase))
                         {
                             // No change. Ignore
                             continue;
                         }
 
-                        text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
+                        text = String.Format("Change all shortcuts directories to \"{0}\"", newShortcut);
                         dialogResult = MessageBox.Show(text, "Some Title",
                             MessageBoxButtons.YesNoCancel);
                         if (dialogResult != DialogResult.Yes)
@@ -299,7 +306,7 @@ namespace FileMagic
                         // Change all shortcuts to the new target
                         // Test to see if changed directory exists
 
-                        changeDir = targetDir;
+                        changeDir = newShortcut;
                     }
 
                     ShortcutHelper.ChangeShortcut(file, changeDir + targetName);

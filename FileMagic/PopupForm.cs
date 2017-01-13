@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,7 @@ namespace FileMagic
 {
     public partial class PopupForm : Form
     {
-        string CurrentShortcut;
-        string NewShortcut { get; set; }
+        public string NewShortcut { get; set; }
 
         public PopupForm()
         {
@@ -29,11 +29,14 @@ namespace FileMagic
                 this.Close();
             }
 
-            CurrentShortcut = ShortcutHelper.ResolveShortcut(file);
+            FileInfo target = new FileInfo(ShortcutHelper.ResolveShortcut(file));
 
-            label1.Text = file;
-            label3.Text = CurrentShortcut;
+            lblFile.Text = file;
+            lblTarget.Text = target.FullName;
+            txtNewTargetDir.Text = target.DirectoryName;
+            NewShortcut = txtNewTargetDir.Text;
         }
+
 
         private void btnPopupOK_Click(object sender, EventArgs e)
         {
@@ -51,6 +54,11 @@ namespace FileMagic
         {
             this.Close();
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            NewShortcut = txtNewTargetDir.Text;
         }
     }
 }
