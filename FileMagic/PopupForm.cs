@@ -15,13 +15,20 @@ namespace FileMagic
     public partial class PopupForm : Form
     {
         public string NewShortcut { get; set; }
+        bool fixShortcut;
 
-        public PopupForm()
+        public PopupForm(string formText)
         {
             InitializeComponent();
+            this.Text = formText;
         }
 
-        public void PopupForm_Initialize(string file)
+        private void PopupForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void PopupForm_Initialize(string file, bool FixShortcut = false)
         {
             if (!ShortcutHelper.IsShortcut(file))
             {
@@ -29,6 +36,7 @@ namespace FileMagic
                 this.Close();
             }
 
+            fixShortcut = FixShortcut;
             FileInfo target = new FileInfo(ShortcutHelper.ResolveShortcut(file));
 
             lblFile.Text = file;
@@ -37,12 +45,6 @@ namespace FileMagic
             NewShortcut = txtNewTargetDir.Text;
         }
 
-
-        private void btnPopupOK_Click(object sender, EventArgs e)
-        {
-            this.Close();
-
-        }
 
         private void btnPopupSkip_Click(object sender, EventArgs e)
         {
@@ -60,5 +62,21 @@ namespace FileMagic
         {
             NewShortcut = txtNewTargetDir.Text;
         }
+
+
+        private void btnPopupOK_Click(object sender, EventArgs e)
+        {
+            if (!fixShortcut)
+            {
+                this.Close();
+            }
+
+            if (!Directory.Exists(NewShortcut))
+            {
+                string text = String.Format("\"{0}\"\n is an INVALID directory", NewShortcut);
+                MessageBox.Show(text,"INVALID DIRECTORY");
+            }
+        }
+
     }
 }

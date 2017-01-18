@@ -71,14 +71,14 @@
             this.txtChangeShortcut = new System.Windows.Forms.TextBox();
             this.lblPathError = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.fixShortcutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
+            this.fixShortcutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -419,7 +419,7 @@
             // 
             // txtChangeShortcut
             // 
-            this.txtChangeShortcut.Location = new System.Drawing.Point(236, 53);
+            this.txtChangeShortcut.Location = new System.Drawing.Point(236, 35);
             this.txtChangeShortcut.Name = "txtChangeShortcut";
             this.txtChangeShortcut.Size = new System.Drawing.Size(696, 20);
             this.txtChangeShortcut.TabIndex = 7;
@@ -437,27 +437,28 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 50);
+            this.label4.Location = new System.Drawing.Point(3, 32);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 13);
             this.label4.TabIndex = 9;
             this.label4.Text = "Change to:";
             // 
-            // tableLayoutPanel3
+            // fixShortcutPanel
             // 
-            this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
-            this.tableLayoutPanel3.Controls.Add(this.txtChangeShortcut, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.lblPathError, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label4, 0, 1);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(31, 485);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(935, 100);
-            this.tableLayoutPanel3.TabIndex = 7;
+            this.fixShortcutPanel.ColumnCount = 2;
+            this.fixShortcutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.fixShortcutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.fixShortcutPanel.Controls.Add(this.txtChangeShortcut, 1, 1);
+            this.fixShortcutPanel.Controls.Add(this.lblPathError, 0, 0);
+            this.fixShortcutPanel.Controls.Add(this.label4, 0, 1);
+            this.fixShortcutPanel.Location = new System.Drawing.Point(31, 492);
+            this.fixShortcutPanel.Name = "fixShortcutPanel";
+            this.fixShortcutPanel.RowCount = 2;
+            this.fixShortcutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.fixShortcutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.fixShortcutPanel.Size = new System.Drawing.Size(935, 64);
+            this.fixShortcutPanel.TabIndex = 7;
+            this.fixShortcutPanel.Visible = false;
             // 
             // Form1
             // 
@@ -465,7 +466,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1076, 740);
-            this.Controls.Add(this.tableLayoutPanel3);
+            this.Controls.Add(this.fixShortcutPanel);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.chkBoxTopDirOnly);
             this.Controls.Add(this.chkBoxOverwrite);
@@ -489,8 +490,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
+            this.fixShortcutPanel.ResumeLayout(false);
+            this.fixShortcutPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -539,7 +540,7 @@
         private System.Windows.Forms.TextBox txtChangeShortcut;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblPathError;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel fixShortcutPanel;
     }
 }
 

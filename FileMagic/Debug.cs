@@ -78,7 +78,17 @@ namespace FileMagic
                     if (string.IsNullOrEmpty(changeDir))
                     {
                         string targetDir = targetFile.DirectoryName;
-                        PopupForm popup = new PopupForm();
+
+
+                        ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(file);
+                        dialogResult = ChgShortcut.ShowDialog();
+                        if (dialogResult == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+
+
+                        PopupForm popup = new PopupForm("Create BAD Shortcut");
                         popup.PopupForm_Initialize(file);
 
                         dialogResult = popup.ShowDialog();

@@ -159,6 +159,23 @@ namespace FileMagic
             string target = ShortcutHelper.ResolveShortcut(path);
             string pathRoot = Path.GetPathRoot(target);
 
+            PopupForm popup = new PopupForm("FIX shortcut");
+            popup.PopupForm_Initialize(path, true);
+            DialogResult dialogResult = popup.ShowDialog();
+            if (dialogResult != DialogResult.OK) 
+            {
+                return;
+            }
+
+            return;
+
+
+
+
+
+
+            fixShortcutPanel.Visible = true;
+
             if (!diskDrives.Contains(pathRoot))
             {
                 string format = String.Format("INVALID DISK DRIVE \"{0}\"", pathRoot);
@@ -166,7 +183,7 @@ namespace FileMagic
                 txtChangeShortcut.Text = target;
                 this.Refresh();
 
-                MessageBox.Show(String.Format("{0} is not a valid drive", pathRoot));
+                //MessageBox.Show(String.Format("{0} is not a valid drive", pathRoot));
                 return;
             }
 

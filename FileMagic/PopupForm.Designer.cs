@@ -130,6 +130,7 @@
             this.Controls.Add(this.btnPopupOK);
             this.Name = "PopupForm";
             this.Text = "Create BAD shortcuts";
+            this.Load += new System.EventHandler(this.PopupForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

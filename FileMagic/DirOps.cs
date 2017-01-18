@@ -66,7 +66,8 @@ namespace FileMagic
             foreach (var file in files)
             {
                 FileInfo currentFile = new FileInfo(file);
-                if (currentFile.Extension == @".lnk")
+
+                if (ShortcutHelper.IsShortcut(currentFile.FullName))
                 {
                     // Change the current file info to the linked target file
                     currentFile = new FileInfo(ShortcutHelper.ResolveShortcut(file));
@@ -83,19 +84,19 @@ namespace FileMagic
                         }
                     }
 
-                    if (!currentFile.Exists)
+                    if (!File.Exists(currentFile.FullName))
                     {
                         // This file had a bad or missing target link
                         // MessageBox.Show(String.Format("File {0} does not exist", currentFile.FullName));
                         info.badLinks.Add(file);
-                        //info.totalFiles++; // Count it anyway
-                        continue;
                     }
                 }
 
                 info.totalFiles++;
-                info.totalBytes += (long)currentFile.Length;
-
+                if (File.Exists(currentFile.FullName))
+                {
+                    info.totalBytes += (long)currentFile.Length;
+                }
             }
 
             // Now do the subdirectories
