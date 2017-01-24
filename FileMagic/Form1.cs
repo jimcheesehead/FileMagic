@@ -28,7 +28,7 @@ namespace FileMagic
         string formDataFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "FileMagic.dat");
 
-        List<string> diskDrives = new List<string>();
+        public static List<string> diskDrives = new List<string>();
 
         string srcPath, dstPath;
         int fileCount;

@@ -74,10 +74,14 @@ namespace FileShortcutHelper
 
                 Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
                 string s = link.WorkingDirectory;
+                s = link.Path;
 
-                link.WorkingDirectory = null;
+
+                //link.WorkingDirectory = null;
                 link.Path = target;
                 link.Save();
+
+                s = ResolveShortcut(path);
             }
         }
     }

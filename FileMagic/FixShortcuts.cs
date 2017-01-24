@@ -159,13 +159,19 @@ namespace FileMagic
             string target = ShortcutHelper.ResolveShortcut(path);
             string pathRoot = Path.GetPathRoot(target);
 
-            PopupForm popup = new PopupForm("FIX shortcut");
-            popup.PopupForm_Initialize(path, true);
-            DialogResult dialogResult = popup.ShowDialog();
-            if (dialogResult != DialogResult.OK) 
+            ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(path, true);
+            DialogResult dialogResult = ChgShortcut.ShowDialog();
+            if (dialogResult == DialogResult.Ignore)
             {
                 return;
             }
+            else if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            // Get the new shotcut directory
+            string newShortcut = ChgShortcut.NewShortcut;
 
             return;
 
@@ -174,7 +180,7 @@ namespace FileMagic
 
 
 
-            fixShortcutPanel.Visible = true;
+            // fixShortcutPanel.Visible = true;
 
             if (!diskDrives.Contains(pathRoot))
             {
@@ -217,8 +223,6 @@ namespace FileMagic
             lblPathError.Text = null;
         }
 
-
-
         public static int CountDirectoryLevels(string path)
         {
             FileInfo f = new FileInfo(path);
@@ -229,7 +233,7 @@ namespace FileMagic
             return levels.Count();
         }
 
-        public string[] GetDirectoryLevels(string path)
+        public static string[] GetDirectoryLevels(string path)
         {
             FileInfo f = new FileInfo(path);
             string DirectoryName = f.DirectoryName;

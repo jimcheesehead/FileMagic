@@ -35,6 +35,7 @@
             this.txtNewTargetDir = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnSkip = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblFile
@@ -69,19 +70,21 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(16, 67);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(63, 13);
+            this.label4.Size = new System.Drawing.Size(108, 13);
             this.label4.TabIndex = 3;
-            this.label4.Text = "New Target";
+            this.label4.Text = "New Target Directory";
             // 
             // txtNewTargetDir
             // 
-            this.txtNewTargetDir.Location = new System.Drawing.Point(100, 60);
+            this.txtNewTargetDir.Location = new System.Drawing.Point(130, 60);
             this.txtNewTargetDir.Name = "txtNewTargetDir";
-            this.txtNewTargetDir.Size = new System.Drawing.Size(745, 20);
+            this.txtNewTargetDir.Size = new System.Drawing.Size(715, 20);
             this.txtNewTargetDir.TabIndex = 4;
+            this.txtNewTargetDir.TextChanged += new System.EventHandler(this.txtNewTargetDir_TextChanged);
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(19, 109);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
@@ -92,6 +95,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(101, 108);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -100,11 +104,24 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnSkip
+            // 
+            this.btnSkip.DialogResult = System.Windows.Forms.DialogResult.Ignore;
+            this.btnSkip.Location = new System.Drawing.Point(183, 109);
+            this.btnSkip.Name = "btnSkip";
+            this.btnSkip.Size = new System.Drawing.Size(75, 23);
+            this.btnSkip.TabIndex = 7;
+            this.btnSkip.Text = "Skip";
+            this.btnSkip.UseVisualStyleBackColor = true;
+            this.btnSkip.Visible = false;
+            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
+            // 
             // ChangeShortcutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(857, 155);
+            this.Controls.Add(this.btnSkip);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtNewTargetDir);
@@ -129,5 +146,6 @@
         private System.Windows.Forms.TextBox txtNewTargetDir;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnSkip;
     }
 }

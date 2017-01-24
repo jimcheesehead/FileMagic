@@ -82,27 +82,17 @@ namespace FileMagic
 
                         ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(file);
                         dialogResult = ChgShortcut.ShowDialog();
-                        if (dialogResult == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-
-
-                        PopupForm popup = new PopupForm("Create BAD Shortcut");
-                        popup.PopupForm_Initialize(file);
-
-                        dialogResult = popup.ShowDialog();
-                        if (dialogResult == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-                        else if (dialogResult == DialogResult.No)
+                        if (dialogResult == DialogResult.Ignore)
                         {
                             continue;
                         }
+                        else if (dialogResult == DialogResult.Cancel)
+                        {
+                            return;
+                        }
 
                         // Get the new shotcut directory
-                        string newShortcut = popup.NewShortcut;
+                        string newShortcut = ChgShortcut.NewShortcut;
 
                         if (String.Equals(targetDir, newShortcut, StringComparison.OrdinalIgnoreCase))
                         {
