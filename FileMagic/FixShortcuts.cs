@@ -187,6 +187,19 @@ namespace FileMagic
             else
             {
 
+                // Change all shortcuts to the new target
+                // WARNING!! Make sure only the bad ones are fixed
+
+            }
+
+            // Remove the bad shortcut from the list
+            foreach (string item in info.badLinks)
+            {
+                if (item.Equals(path))
+                {
+                    info.badLinks.Remove(path);
+                    break;
+                }
             }
 
             ShowBadLinks(info.badLinks, currentTxtBoxLine);
