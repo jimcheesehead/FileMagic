@@ -16,11 +16,13 @@ namespace FileMagic
     {
         bool FixShortcut;
         string fileName;
+        //string targetFileName;
 
         FileInfo file;
         FileInfo target;
 
-        public string NewShortcut { get; set; }
+        public string TargetDir { get; private set; }
+        public string TargetFileName { get; private set; }
 
         // Constructor
         public ChangeShortcutForm(string path, bool fixShorcut = false)
@@ -28,10 +30,7 @@ namespace FileMagic
             InitializeComponent();
             fileName = path;
             FixShortcut = fixShorcut;
-        }
 
-        private void ChangeShortcutForm_Load(object sender, EventArgs e)
-        {
             try
             {
                 file = new FileInfo(fileName);
@@ -41,6 +40,20 @@ namespace FileMagic
                 MessageBox.Show(ex.Message, "INVALID SHORTCUT FILE");
                 this.Close();
             }
+
+        }
+
+        private void ChangeShortcutForm_Load(object sender, EventArgs e)
+        {
+            //try
+            //{
+            //    file = new FileInfo(fileName);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "INVALID SHORTCUT FILE");
+            //    this.Close();
+            //}
 
             if (!ShortcutHelper.IsShortcut(fileName))
             {
@@ -58,25 +71,27 @@ namespace FileMagic
                 btnSkip.Visible = true;
             }
 
-            // Show the original file (shortcut) and it's current target
-            lblFile.Text = fileName;
+            // Get the shortcut target and set properties
             target = new FileInfo(ShortcutHelper.ResolveShortcut(fileName));
+            TargetDir = target.DirectoryName;
+            TargetFileName = target.Name;
+
+            // Display the shortcut filename and original target
+            lblFile.Text = fileName;
             lblTarget.Text = target.FullName;
 
-            if (FixShortcut)
-            {
+            // Set the text box text for changing the shortcut target
+            txtNewTargetDir.Text = target.DirectoryName;
 
-            } else
-            {
-                txtNewTargetDir.Text = target.DirectoryName;
-                NewShortcut = txtNewTargetDir.Text;
-            }
+
+            //targetFileName = target.Name;
+
+            //TargetDir = txtNewTargetDir.Text;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            
-            this.Close();
+            // Closes form and returns DialogResult.Cancel 
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -86,7 +101,7 @@ namespace FileMagic
 
         private void txtNewTargetDir_TextChanged(object sender, EventArgs e)
         {
-            NewShortcut = txtNewTargetDir.Text;
+            TargetDir = txtNewTargetDir.Text;
         }
 
 
@@ -94,10 +109,21 @@ namespace FileMagic
         {
             if (!FixShortcut)
             {
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-
-            string newTarget = FindTarget(target);
+            else
+            {
+                // See if the new target is valid
+                // If not, don't close the form
+                string path = TargetDir + "\\" + TargetFileName;
+                if (File.Exists(path))
+                {
+                    // New shortcut is valid. Close the form
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+            }
         }
 
         private string FindTarget(FileInfo file)
@@ -116,7 +142,6 @@ namespace FileMagic
                         return path;
                 }
             }
-
 
             return null;
         }

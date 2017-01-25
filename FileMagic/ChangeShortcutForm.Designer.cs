@@ -61,9 +61,9 @@
             this.lblTarget.AutoSize = true;
             this.lblTarget.Location = new System.Drawing.Point(97, 39);
             this.lblTarget.Name = "lblTarget";
-            this.lblTarget.Size = new System.Drawing.Size(35, 13);
+            this.lblTarget.Size = new System.Drawing.Size(48, 13);
             this.lblTarget.TabIndex = 2;
-            this.lblTarget.Text = "label3";
+            this.lblTarget.Text = "llbTarget";
             // 
             // label4
             // 
@@ -84,7 +84,6 @@
             // 
             // btnOK
             // 
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(19, 109);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);

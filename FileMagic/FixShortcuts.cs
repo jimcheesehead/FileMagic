@@ -170,30 +170,24 @@ namespace FileMagic
                 return;
             }
 
-            // Get the new shotcut directory
-            string newShortcut = ChgShortcut.NewShortcut;
-
-            return;
-
-
-
-
-
-
-            // fixShortcutPanel.Visible = true;
-
-            if (!diskDrives.Contains(pathRoot))
+            // Get the new shortcut directory and see if we want to fix all bad links
+            string targetDir = ChgShortcut.TargetDir;
+            text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
+            dialogResult = MessageBox.Show(text, "CHANGE SHORTCUT",
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.None, MessageBoxDefaultButton.Button2);
+            if (dialogResult == DialogResult.Cancel)
             {
-                string format = String.Format("INVALID DISK DRIVE \"{0}\"", pathRoot);
-                lblPathError.Text = format;
-                txtChangeShortcut.Text = target;
-                this.Refresh();
-
-                //MessageBox.Show(String.Format("{0} is not a valid drive", pathRoot));
                 return;
             }
+            if (dialogResult == DialogResult.No)
+            {
+                // Fix only the selected bad link
+                ShortcutHelper.ChangeShortcut(path, targetDir + "\\" + ChgShortcut.TargetFileName);
+            }
+            else
+            {
 
-            //ShortcutHelper.ChangeShortcut(path, @"B:\foobar.txt");
+            }
 
             ShowBadLinks(info.badLinks, currentTxtBoxLine);
         }
@@ -228,7 +222,7 @@ namespace FileMagic
             FileInfo f = new FileInfo(path);
             string DirectoryName = f.DirectoryName;
 
-            char[] delim = {'\\'};
+            char[] delim = { '\\' };
             string[] levels = DirectoryName.Split(delim);
             return levels.Count();
         }

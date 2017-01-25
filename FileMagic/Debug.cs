@@ -92,7 +92,7 @@ namespace FileMagic
                         }
 
                         // Get the new shotcut directory
-                        string newShortcut = ChgShortcut.NewShortcut;
+                        string newShortcut = ChgShortcut.TargetDir;
 
                         if (String.Equals(targetDir, newShortcut, StringComparison.OrdinalIgnoreCase))
                         {
@@ -111,9 +111,14 @@ namespace FileMagic
                         text = String.Format("Change all shortcuts directories to \"{0}\"", newShortcut);
                         dialogResult = MessageBox.Show(text, "CHANGE SHORTCUT",
                             MessageBoxButtons.YesNoCancel);
-                        if (dialogResult != DialogResult.Yes)
+                        if (dialogResult == DialogResult.Cancel)
                         {
                             return;
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            ShortcutHelper.ChangeShortcut(file, newShortcut + "\\" + targetName);
+                            continue;
                         }
 
                         // Change all shortcuts to the new target
