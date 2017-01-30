@@ -163,8 +163,11 @@ namespace FileMagic
                 srcPath, info.totalFiles, info.totalDirs,
                 GetBytesReadable(info.totalBytes));
 
-            if (info.badLinks.Count> 0)
+            if (info.badLinks.Count > 0) {
+                // Show the bad links
                 text += String.Format(" - {0} bad links", info.badLinks.Count);
+                ShowBadLinks(info.badLinks, 0);
+            }
 
             // Save the processed source path.
             Push(formData.srcInputList, srcPath);

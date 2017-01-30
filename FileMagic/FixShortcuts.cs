@@ -183,6 +183,9 @@ namespace FileMagic
             {
                 // Fix only the selected bad link
                 ShortcutHelper.ChangeShortcut(path, targetDir + "\\" + ChgShortcut.TargetFileName);
+
+                //// Remove the bad shortcut from the list
+                info.badLinks.Remove(path);
             }
             else
             {
@@ -190,19 +193,39 @@ namespace FileMagic
                 // Change all shortcuts to the new target
                 // WARNING!! Make sure only the bad ones are fixed
 
+                FixAllShortcuts(targetDir);
             }
 
-            // Remove the bad shortcut from the list
-            foreach (string item in info.badLinks)
-            {
-                if (item.Equals(path))
-                {
-                    info.badLinks.Remove(path);
-                    break;
-                }
-            }
+            /////// TODO //////////
+            // Display the NEW directory and bad link count 
 
             ShowBadLinks(info.badLinks, currentTxtBoxLine);
+        }
+
+        private void FixAllShortcuts(string newTargetDir)
+        {
+            // Make an array copy of the badLinks items so they can be removed
+            string[] badLinks = new string[info.badLinks.Count];
+            info.badLinks.CopyTo(badLinks);
+
+            // Fix the shortcut targets and remove them from the list
+            // That's why we use an array copy of the bad links
+       
+            foreach (string path in badLinks)
+            {
+                string target = ShortcutHelper.ResolveShortcut(path);
+                FileInfo file = new FileInfo(target);
+                string newTarget = newTargetDir + "\\" + file.Name;
+
+                // If the new target file exists, change the link to it and remove
+                // the item from the bad file list
+                if (File.Exists(newTarget))
+                {
+                    // Fix the selected bad link and remove the bad shortcut from the list
+                    ShortcutHelper.ChangeShortcut(path, newTarget);
+                    info.badLinks.Remove(path);
+                }
+            }
         }
 
         private void SelectTextBoxLine(int line)
