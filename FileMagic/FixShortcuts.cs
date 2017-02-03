@@ -45,6 +45,13 @@ namespace FileMagic
             filesTextBox.Clear();
             currentTxtBoxLine = 0;
 
+            // Nothing more to do if there ar no bad links!
+            if (badLinks.Count == 0)
+            {
+                ShowSatus("Ready", "");
+                return;
+            }
+
             foreach (var file in badLinks)
             {
                 FileInfo shortcut = new FileInfo(file);
