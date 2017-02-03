@@ -196,7 +196,7 @@ namespace FileMagic
                 FixAllShortcuts(targetDir);
             }
 
-            /////// TODO //////////
+            /////// TODO!!!!! //////////
             // Display the NEW directory and bad link count 
 
             ShowBadLinks(info.badLinks, currentTxtBoxLine);
