@@ -72,16 +72,31 @@ namespace FileMagic
             }
 
             // Get the shortcut target and set properties
+
             target = new FileInfo(ShortcutHelper.ResolveShortcut(fileName));
             TargetDir = target.DirectoryName;
             TargetFileName = target.Name;
+
+
+            string targetPathRoot = Path.GetPathRoot(target.FullName);
+            if (!Directory.Exists(targetPathRoot))
+            {
+                char[] a1 = fileName.ToCharArray();
+                char[] a2 = TargetDir.ToCharArray();
+                a2[0] = a1[0];
+                TargetDir = new string(a2);
+
+               
+                //MessageBox.Show(String.Format("\"{0}\" has invalid drive", target.FullName), "INVALID SHORTCUT DRIVE");
+
+            }
 
             // Display the shortcut filename and original target
             lblFile.Text = fileName;
             lblTarget.Text = target.FullName;
 
             // Set the text box text for changing the shortcut target
-            txtNewTargetDir.Text = target.DirectoryName;
+            txtNewTargetDir.Text = TargetDir;
 
 
             //targetFileName = target.Name;
