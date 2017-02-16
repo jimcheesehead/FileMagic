@@ -20,6 +20,7 @@ namespace FileMagic
 
         private void fixShortcutsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string selectedLink;
 
             if (checkPathErrors(false))
             {
@@ -36,20 +37,39 @@ namespace FileMagic
                 return;
             }
 
-            // Show the bad links. Fixes will be initiated by selecting a bad link.
-            ShowBadLinks(info.badLinks, 0);
+            // Show the bad links. Then allow fix on the first (selected) link.
+            selectedLink = ShowBadLinks(info.badLinks, 0);
+            FixTheShortcut(selectedLink);
         }
 
-        private void ShowBadLinks(List<string> badLinks, int line)
+        private string getLinkFromText()
+        {
+            int line, index;
+            int first, last;
+            string text, link;
+
+            index = filesTextBox.SelectionStart;
+            currentTxtBoxLine = line = filesTextBox.GetLineFromCharIndex(index);
+            SelectTextBoxLine(line);
+
+            text = filesTextBox.SelectedText;
+            first = text.IndexOf(PointsTo);
+            last = first + PointsTo.Length;
+            link = text.Substring(0, first);
+            return link;
+        }
+
+        private string ShowBadLinks(List<string> badLinks, int line)
         {
             filesTextBox.Clear();
             currentTxtBoxLine = 0;
+            string badLink = null;
 
             // Nothing more to do if there ar no bad links!
             if (badLinks.Count == 0)
             {
                 ShowSatus("Ready", "");
-                return;
+                return badLink;
             }
 
             foreach (var file in badLinks)
@@ -66,6 +86,9 @@ namespace FileMagic
 
             SelectTextBoxLine(line);
             filesTextBox.Focus();
+
+            badLink = getLinkFromText();
+            return badLink;
         }
 
         private void btnUp_Click(object sender, EventArgs e)
@@ -113,19 +136,8 @@ namespace FileMagic
             {
                 e.Handled = true;
 
-                int line, index;
-                int first, last;
-                string text, link;
-
-                index = filesTextBox.SelectionStart;
-                currentTxtBoxLine = line = filesTextBox.GetLineFromCharIndex(index);
-                SelectTextBoxLine(line);
-
-                text = filesTextBox.SelectedText;
-                first = text.IndexOf(PointsTo);
-                last = first + PointsTo.Length;
-                link = text.Substring(0, first);
-                FixTheShortcut(link);
+                // Allow fixing of of the selected shortcut
+                FixTheShortcut(getLinkFromText());
             }
             else if (e.KeyCode == Keys.Down)
             {
