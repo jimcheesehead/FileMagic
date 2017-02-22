@@ -178,7 +178,8 @@ namespace FileMagic
             string target = ShortcutHelper.ResolveShortcut(path);
             string pathRoot = Path.GetPathRoot(target);
 
-            ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(path, true);
+            //ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(path, true);
+            ChangeShortcutForm ChgShortcut = new ChangeShortcutForm(path, false);
             DialogResult dialogResult = ChgShortcut.ShowDialog();
             if (dialogResult == DialogResult.Ignore)
             {
@@ -191,6 +192,8 @@ namespace FileMagic
 
             // Get the new shortcut directory and see if we want to fix all bad links
             string targetDir = ChgShortcut.TargetDir;
+
+
             text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
             dialogResult = MessageBox.Show(text, "CHANGE SHORTCUT",
                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.None, MessageBoxDefaultButton.Button2);
@@ -201,10 +204,20 @@ namespace FileMagic
             if (dialogResult == DialogResult.No)
             {
                 // Fix only the selected bad link
-                ShortcutHelper.ChangeShortcut(path, targetDir + "\\" + ChgShortcut.TargetFileName);
+                string targetFile = RecursiveFindFile(targetDir, ChgShortcut.TargetFileName);
+                if (!String.IsNullOrEmpty(targetFile))
+                {
+                    // Target file has been found. Fix the shortcut
+                    ShortcutHelper.ChangeShortcut(path, targetFile);
+                    //// Remove the bad shortcut from the list
+                    info.badLinks.Remove(path);
+                }
 
-                //// Remove the bad shortcut from the list
-                info.badLinks.Remove(path);
+                ////ShortcutHelper.ChangeShortcut(path, targetDir + "\\" + ChgShortcut.TargetFileName);
+                //ShortcutHelper.ChangeShortcut(path, targetFile);
+
+                ////// Remove the bad shortcut from the list
+                //info.badLinks.Remove(path);
             }
             else
             {
@@ -229,7 +242,7 @@ namespace FileMagic
 
             // Fix the shortcut targets and remove them from the list
             // That's why we use an array copy of the bad links
-       
+
             foreach (string path in badLinks)
             {
                 string target = ShortcutHelper.ResolveShortcut(path);
@@ -245,6 +258,32 @@ namespace FileMagic
                     info.badLinks.Remove(path);
                 }
             }
+        }
+
+        private string RecursiveFindFile(string sDir, string sFile)
+        {
+            // Continues to search for ALL occurences of the file.
+            // We need to stop the recursion after the first file is found!
+            foreach (string dir in Directory.GetDirectories(sDir))
+            {
+                foreach (string file in Directory.GetFiles(dir, sFile))
+                {
+                    //string fileName = Path.GetFileName(file);
+                    //Console.WriteLine(fileName);
+
+                    // FILE FOUND! STOP the search
+                    return file;
+                }
+                // Recursive Search
+                string path = RecursiveFindFile(dir, sFile);
+                if (!String.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+            }
+
+            // File not found in this tree
+            return null;
         }
 
         private void SelectTextBoxLine(int line)

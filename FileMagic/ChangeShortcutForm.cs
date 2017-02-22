@@ -45,16 +45,6 @@ namespace FileMagic
 
         private void ChangeShortcutForm_Load(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    file = new FileInfo(fileName);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "INVALID SHORTCUT FILE");
-            //    this.Close();
-            //}
-
             if (!ShortcutHelper.IsShortcut(fileName))
             {
                 MessageBox.Show(String.Format("\"{0}\" is not a shortcut", fileName), "INVALID SHORTCUT FILE");
@@ -129,7 +119,7 @@ namespace FileMagic
             }
             else
             {
-                // See if the new target is valid
+                // See if the new target is valid ?????????????????????????????????????????????????????????????????
                 // If not, don't close the form
                 string path = TargetDir + "\\" + TargetFileName;
                 if (File.Exists(path))
