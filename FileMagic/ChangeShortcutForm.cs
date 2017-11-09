@@ -137,6 +137,7 @@ namespace FileMagic
 
             // The most common problem is an invalid disk drive
             string disk = Path.GetPathRoot(file.FullName);
+            // This needs to be fixed
             if (!Form1.diskDrives.Contains(disk))
             {
                 string subPath = file.FullName.Substring(3);
