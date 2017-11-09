@@ -28,7 +28,7 @@ namespace FileMagic
         string formDataFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "FileMagic.dat");
 
-        public static List<string> diskDrives = new List<string>();
+        List<string> diskDrives = new List<string>();
 
         string srcPath, dstPath;
         int fileCount;
@@ -163,11 +163,8 @@ namespace FileMagic
                 srcPath, info.totalFiles, info.totalDirs,
                 GetBytesReadable(info.totalBytes));
 
-            if (info.badLinks.Count > 0) {
-                // Show the bad links
+            if (info.badLinks.Count> 0)
                 text += String.Format(" - {0} bad links", info.badLinks.Count);
-                ShowBadLinks(info.badLinks, 0);
-            }
 
             // Save the processed source path.
             Push(formData.srcInputList, srcPath);

@@ -222,12 +222,6 @@ namespace FileMagic
                     //// Remove the bad shortcut from the list
                     info.badLinks.Remove(path);
                 }
-
-                ////ShortcutHelper.ChangeShortcut(path, targetDir + "\\" + ChgShortcut.TargetFileName);
-                //ShortcutHelper.ChangeShortcut(path, targetFile);
-
-                ////// Remove the bad shortcut from the list
-                //info.badLinks.Remove(path);
             }
             else
             {
@@ -255,16 +249,16 @@ namespace FileMagic
 
             foreach (string path in badLinks)
             {
+                // Find the shortcut target file
                 string target = ShortcutHelper.ResolveShortcut(path);
-                FileInfo file = new FileInfo(target);
-                string newTarget = newTargetDir + "\\" + file.Name;
+                string targetFilename = Path.GetFileName(target);
 
-                // If the new target file exists, change the link to it and remove
-                // the item from the bad file list
-                if (File.Exists(newTarget))
+                string targetFile = RecursiveFindFile(newTargetDir, targetFilename);
+                if (!String.IsNullOrEmpty(targetFile))
                 {
-                    // Fix the selected bad link and remove the bad shortcut from the list
-                    ShortcutHelper.ChangeShortcut(path, newTarget);
+                    // Target file has been found. Fix the shortcut
+                    ShortcutHelper.ChangeShortcut(path, targetFile);
+                    //// Remove the bad shortcut from the list
                     info.badLinks.Remove(path);
                 }
             }
@@ -281,20 +275,31 @@ namespace FileMagic
 
             foreach (string dir in Directory.GetDirectories(sDir))
             {
-                foreach (string file in Directory.GetFiles(dir, sFile))
+                try
                 {
-                    //string fileName = Path.GetFileName(file);
-                    //Console.WriteLine(fileName);
+                    foreach (string file in Directory.GetFiles(dir, sFile))
+                    {
+                        //string fileName = Path.GetFileName(file);
+                        //Console.WriteLine(fileName);
 
-                    // FILE FOUND! STOP the search
-                    return file;
+                        // FILE FOUND! STOP the search
+                        return file;
+                    }
+                    // Recursive Search
+                    string path = RecursiveFindFile(dir, sFile);
+                    if (!String.IsNullOrEmpty(path))
+                    {
+                        return path;
+                    }
                 }
-                // Recursive Search
-                string path = RecursiveFindFile(dir, sFile);
-                if (!String.IsNullOrEmpty(path))
+                catch (Exception Error)
                 {
-                    return path;
+                    // Probably access denied on directory like $RECYCLE.BIN
+                    // Ignore the directory
+
+                    //Console.WriteLine(Error.Message);
                 }
+
             }
 
             // File not found in this tree
