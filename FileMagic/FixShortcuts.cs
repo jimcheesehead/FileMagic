@@ -193,6 +193,16 @@ namespace FileMagic
             // Get the new shortcut directory and see if we want to fix all bad links
             string targetDir = ChgShortcut.TargetDir;
 
+            // Abort if the directory does not exist
+            if (!Directory.Exists(targetDir))
+            {
+                text = String.Format("Directory \"{0}\" is invalid", targetDir);
+                dialogResult = MessageBox.Show(text, "ERROR",
+                    MessageBoxButtons.OK, MessageBoxIcon.None);
+
+                return;
+            }
+
 
             text = String.Format("Change all shortcuts directories to \"{0}\"", targetDir);
             dialogResult = MessageBox.Show(text, "CHANGE SHORTCUT",
@@ -264,6 +274,11 @@ namespace FileMagic
         {
             // Continues to search for ALL occurences of the file.
             // We need to stop the recursion after the first file is found!
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            //// The problem here is what do I do if sDir has no subdirectories
+            //////////////////////////////////////////////////////////////////////////
+
             foreach (string dir in Directory.GetDirectories(sDir))
             {
                 foreach (string file in Directory.GetFiles(dir, sFile))
