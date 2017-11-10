@@ -222,6 +222,11 @@ namespace FileMagic
                     //// Remove the bad shortcut from the list
                     info.badLinks.Remove(path);
                 }
+                else
+                {
+                    // Target file was not found. Delete it?
+
+                }
             }
             else
             {
