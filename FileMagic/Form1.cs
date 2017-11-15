@@ -301,6 +301,11 @@ namespace FileMagic
             return options;
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void Push(BindingList<string> list, string item)
         {
             // Remove any instances of the item

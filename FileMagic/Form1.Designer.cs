@@ -54,6 +54,7 @@
             this.btnCopy = new System.Windows.Forms.ToolStripButton();
             this.btnUp = new System.Windows.Forms.ToolStripButton();
             this.btnDown = new System.Windows.Forms.ToolStripButton();
+            this.btnCancel = new System.Windows.Forms.ToolStripButton();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -232,7 +233,8 @@
             this.btnAnalyze,
             this.btnCopy,
             this.btnUp,
-            this.btnDown});
+            this.btnDown,
+            this.btnCancel});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1076, 25);
@@ -280,6 +282,17 @@
             this.btnDown.Size = new System.Drawing.Size(23, 22);
             this.btnDown.Text = "toolStripButton4";
             this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+            this.btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(23, 22);
+            this.btnCancel.Text = "toolStripButton1";
+            this.btnCancel.ToolTipText = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // backgroundWorker1
             // 
@@ -541,6 +554,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblPathError;
         private System.Windows.Forms.TableLayoutPanel fixShortcutPanel;
+        private System.Windows.Forms.ToolStripButton btnCancel;
     }
 }
 
